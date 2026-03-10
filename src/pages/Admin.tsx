@@ -198,13 +198,13 @@ const Admin = () => {
       setCreditAmount("");
 
       // Refresh user list to show updated balance
-      const { data: profiles } = await supabase.from("profiles").select("user_id, username");
+      const { data: profiles } = await (supabase as any).from("profiles").select("user_id, username, email, display_name");
       const { data: balances } = await supabase.from("balances").select("user_id, amount");
       if (profiles) {
         const balanceMap = new Map((balances || []).map(b => [b.user_id, Number(b.amount)]));
-        setAllUsers(profiles.map(p => ({
+        setAllUsers(profiles.map((p: any) => ({
           user_id: p.user_id,
-          username: p.username || "Unknown",
+          username: p.username || p.display_name || p.email || "Unknown",
           amount: balanceMap.get(p.user_id) || 0,
         })));
       }
