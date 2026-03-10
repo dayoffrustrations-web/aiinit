@@ -76,6 +76,24 @@ const Admin = () => {
     return () => window.removeEventListener("admin-prediction-consumed", handler);
   }, []);
 
+  // Load active crash point from DB on mount
+  useEffect(() => {
+    if (!isAdmin) return;
+    const loadActive = async () => {
+      const { data } = await (supabase as any)
+        .from("admin_crash_settings")
+        .select("next_crash_point")
+        .eq("consumed", false)
+        .order("set_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (data?.next_crash_point) {
+        setActivePrediction(Number(data.next_crash_point));
+      }
+    };
+    loadActive();
+  }, [isAdmin]);
+
   useEffect(() => {
     if (!isAdmin) return;
     const fetchData = async () => {
