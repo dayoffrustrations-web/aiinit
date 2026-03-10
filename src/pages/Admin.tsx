@@ -166,7 +166,7 @@ const Admin = () => {
       setActivePrediction(rounded);
       // Also dispatch window event for same-tab leader
       window.dispatchEvent(new CustomEvent("admin-set-crash-point", { detail: { crashPoint: rounded } }));
-      toast.success(`Next round will crash at ${rounded.toFixed(2)}x`);
+      toast.success(`Prediction set: next round will crash at ${rounded.toFixed(2)}x`);
       setPredictionValue("");
     } catch (err: any) {
       toast.error(`Failed to set crash point: ${err.message}`);
