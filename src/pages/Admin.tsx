@@ -293,6 +293,9 @@ const Admin = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Crash History */}
         <div className="bg-card border border-border rounded-xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <Eye className="w-4 h-4 text-primary" />
