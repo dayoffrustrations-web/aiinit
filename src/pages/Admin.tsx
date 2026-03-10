@@ -34,7 +34,7 @@ const Admin = () => {
           .select("role")
           .eq("user_id", user.id)
           .eq("role", "admin")
-          .single();
+          .maybeSingle();
         setIsAdmin(!!data && !error);
         if (!data || error) {
           toast.error("Access denied. Admin role required.");
@@ -166,7 +166,7 @@ const Admin = () => {
       setActivePrediction(rounded);
       // Also dispatch window event for same-tab leader
       window.dispatchEvent(new CustomEvent("admin-set-crash-point", { detail: { crashPoint: rounded } }));
-      toast.success(`Next round will crash at ${rounded.toFixed(2)}x`);
+      toast.success(`Prediction set: next round will crash at ${rounded.toFixed(2)}x`);
       setPredictionValue("");
     } catch (err: any) {
       toast.error(`Failed to set crash point: ${err.message}`);
@@ -300,15 +300,15 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Set Next Crash Point */}
+        {/* Correct Predictions */}
         <div className="bg-card border border-primary/30 rounded-xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Set Next Crash Point</h2>
+            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Correct Predictions</h2>
           </div>
           {activePrediction !== null && (
             <div className="mb-3 p-3 rounded-lg bg-primary/10 border border-primary/30">
-              <p className="text-[10px] text-muted-foreground uppercase mb-1">Next round will crash at:</p>
+              <p className="text-[10px] text-muted-foreground uppercase mb-1">Next round crash prediction:</p>
               <p className={`font-mono text-2xl font-bold ${getColor(activePrediction)}`}>{activePrediction.toFixed(2)}x</p>
             </div>
           )}
@@ -323,7 +323,7 @@ const Admin = () => {
               className="bg-secondary border border-border rounded-lg px-3 py-2 text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Button onClick={handleSetPrediction} className="font-semibold">
-              Set Crash Point
+              Set Prediction
             </Button>
             <Button onClick={handleClearPrediction} variant="outline" className="font-semibold" disabled={activePrediction === null}>
               Clear
