@@ -239,36 +239,6 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Correct Predictions */}
-        <div className="bg-card border border-primary/30 rounded-xl p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="w-4 h-4 text-primary" />
-            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Correct Predictions</h2>
-          </div>
-          {activePrediction !== null && (
-            <div className="mb-3 p-3 rounded-lg bg-primary/10 border border-primary/30">
-              <p className="text-[10px] text-muted-foreground uppercase mb-1">Next round crash prediction:</p>
-              <p className={`font-mono text-2xl font-bold ${getColor(activePrediction)}`}>{activePrediction.toFixed(2)}x</p>
-            </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input
-              type="number"
-              step="0.01"
-              min="1"
-              placeholder="e.g. 1.50"
-              value={predictionValue}
-              onChange={(e) => setPredictionValue(e.target.value)}
-              className="bg-secondary border border-border rounded-lg px-3 py-2 text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/50"
-            />
-            <Button onClick={handleSetPrediction} className="font-semibold">
-              Set Prediction
-            </Button>
-            <Button onClick={handleClearPrediction} variant="outline" className="font-semibold" disabled={activePrediction === null}>
-              Clear
-            </Button>
-          </div>
-        </div>
 
         {/* Crash History */}
         <div className="bg-card border border-border rounded-xl p-5">
