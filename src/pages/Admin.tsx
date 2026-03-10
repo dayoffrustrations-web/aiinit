@@ -20,7 +20,7 @@ const Admin = () => {
   const [creditUserId, setCreditUserId] = useState("");
   const [creditAmount, setCreditAmount] = useState("");
   const [predictionValue, setPredictionValue] = useState("");
-  const [predictionQueue, setPredictionQueue] = useState<number[]>([]);
+  const [activePrediction, setActivePrediction] = useState<number | null>(null);
 
   useEffect(() => {
     if (!user) {
