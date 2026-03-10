@@ -325,7 +325,6 @@ const Admin = () => {
             <Button onClick={handleSetPrediction} className="font-semibold">
               Set Prediction
             </Button>
-            </Button>
             <Button onClick={handleClearPrediction} variant="outline" className="font-semibold" disabled={activePrediction === null}>
               Clear
             </Button>
