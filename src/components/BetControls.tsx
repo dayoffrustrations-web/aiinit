@@ -33,8 +33,7 @@ const BetControls = ({ gameState, onPlaceBet, onCashout, hasBet }: BetControlsPr
 
     if (gameState === "waiting") {
       onPlaceBet(betAmount, cashout);
-      setBetPhase("idle");
-      pendingBetRef.current = null;
+      setBetPhase("pending");
     } else if (gameState === "running") {
       setBetPhase("queued");
     }
@@ -49,6 +48,10 @@ const BetControls = ({ gameState, onPlaceBet, onCashout, hasBet }: BetControlsPr
     if (gameState === "waiting" && betPhase === "queued" && pendingBetRef.current) {
       onPlaceBet(pendingBetRef.current.amount, pendingBetRef.current.cashout);
       pendingBetRef.current = null;
+      setBetPhase("pending");
+    }
+    // Reset pending to idle when game starts running (bet is locked in)
+    if (gameState === "running" && betPhase === "pending") {
       setBetPhase("idle");
     }
   }, [gameState, betPhase, onPlaceBet]);
@@ -148,6 +151,13 @@ const BetControls = ({ gameState, onPlaceBet, onCashout, hasBet }: BetControlsPr
           className="w-full py-3 rounded-xl font-bold text-base uppercase tracking-wider bg-gaming-green text-primary-foreground glow-green transition-all hover:brightness-110 active:scale-[0.98]"
         >
           Cash Out
+        </button>
+      ) : betPhase === "pending" ? (
+        <button
+          onClick={handleCancel}
+          className="w-full py-3 rounded-xl font-bold text-base uppercase tracking-wider bg-destructive/20 text-destructive border border-destructive/30 transition-all hover:bg-destructive/30 active:scale-[0.98] flex items-center justify-center gap-1.5"
+        >
+          <X className="w-4 h-4" /> Cancel Bet
         </button>
       ) : betPhase === "queued" ? (
         <div className="space-y-1.5">
