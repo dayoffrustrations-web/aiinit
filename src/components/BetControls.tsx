@@ -33,8 +33,7 @@ const BetControls = ({ gameState, onPlaceBet, onCashout, hasBet }: BetControlsPr
 
     if (gameState === "waiting") {
       onPlaceBet(betAmount, cashout);
-      setBetPhase("idle");
-      pendingBetRef.current = null;
+      setBetPhase("pending");
     } else if (gameState === "running") {
       setBetPhase("queued");
     }
