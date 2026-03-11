@@ -1,5 +1,6 @@
 import GameHeader from "@/components/GameHeader";
 import CrashHistory from "@/components/CrashHistory";
+import LiveWithdrawals from "@/components/LiveWithdrawals";
 import MultiplierDisplay from "@/components/MultiplierDisplay";
 import BetControls from "@/components/BetControls";
 import LiveBets from "@/components/LiveBets";
