@@ -48,6 +48,10 @@ const BetControls = ({ gameState, onPlaceBet, onCashout, hasBet }: BetControlsPr
     if (gameState === "waiting" && betPhase === "queued" && pendingBetRef.current) {
       onPlaceBet(pendingBetRef.current.amount, pendingBetRef.current.cashout);
       pendingBetRef.current = null;
+      setBetPhase("pending");
+    }
+    // Reset pending to idle when game starts running (bet is locked in)
+    if (gameState === "running" && betPhase === "pending") {
       setBetPhase("idle");
     }
   }, [gameState, betPhase, onPlaceBet]);
