@@ -19,7 +19,7 @@ type AuthMode = "login" | "signup";
 
 const phoneToEmail = (phone: string) => {
   const cleaned = phone.replace(/[^0-9+]/g, "");
-  return `${cleaned}@mozzatbet.app`;
+  return `${cleaned}@bronzebet.app`;
 };
 
 const Auth = () => {

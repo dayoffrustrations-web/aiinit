@@ -105,7 +105,7 @@ Deno.serve(async (req) => {
     const ipnId = await registerIPN(pesapalToken, ipnUrl);
 
     // Generate unique merchant reference
-    const merchantRef = `mzbt-${user.id.slice(0, 8)}-${Date.now()}`;
+    const merchantRef = `brbt-${user.id.slice(0, 8)}-${Date.now()}`;
 
     // Get user email from profile
     const { data: profile } = await supabase
