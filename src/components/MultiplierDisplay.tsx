@@ -212,7 +212,7 @@ const MultiplierDisplay = ({ gameState, multiplier, crashPoint }: MultiplierDisp
 
       <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-secondary/80 backdrop-blur-sm border border-border">
         <div className="w-1.5 h-1.5 rounded-full bg-gaming-green" />
-        <span className="text-[9px] text-muted-foreground font-mono">SHA-256</span>
+        <span className="text-[9px] text-muted-foreground font-mono">Provably Fair</span>
       </div>
     </div>
   );

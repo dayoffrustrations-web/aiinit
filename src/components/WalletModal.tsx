@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import TermsAndConditions from "@/components/TermsAndConditions";
 
 interface WalletModalProps {
   open: boolean;
@@ -21,6 +22,7 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
   const [amount, setAmount] = useState("");
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   if (!open) return null;
 
@@ -33,6 +35,10 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
     }
     if (!phone || phone.length < 10) {
       toast.error("Enter a valid M-Pesa phone number");
+      return;
+    }
+    if (tab === "deposit" && !termsAccepted) {
+      toast.error("You must accept the Terms & Conditions to proceed");
       return;
     }
     if (tab === "withdraw") {
@@ -229,9 +235,13 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
               />
             </div>
 
+            {tab === "deposit" && (
+              <TermsAndConditions accepted={termsAccepted} onAcceptChange={setTermsAccepted} />
+            )}
+
             <Button
               type="submit"
-              disabled={status === "loading"}
+              disabled={status === "loading" || (tab === "deposit" && !termsAccepted)}
               className="w-full py-3 text-sm font-bold uppercase tracking-wider"
             >
               {status === "loading" ? (
