@@ -37,6 +37,10 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
       toast.error("Enter a valid M-Pesa phone number");
       return;
     }
+    if (tab === "deposit" && !termsAccepted) {
+      toast.error("You must accept the Terms & Conditions to proceed");
+      return;
+    }
     if (tab === "withdraw") {
       if (balance <= 0) {
         toast.error("Your balance is KES 0. Deposit funds first.");
