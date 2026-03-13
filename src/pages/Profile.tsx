@@ -171,9 +171,9 @@ const Profile = () => {
                 placeholder="Amount (KES)"
                 className="w-full bg-secondary border border-border rounded-lg px-4 py-3 text-foreground font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
-              <p className="text-[10px] text-muted-foreground">You'll receive an M-Pesa STK push on your phone to confirm payment</p>
+              <p className="text-[10px] text-muted-foreground">You'll be redirected to secure PesaPal checkout to confirm payment</p>
               <Button onClick={handleDeposit} disabled={processing} className="w-full">
-                {processing ? "Sending STK Push..." : "Deposit via M-Pesa"}
+                {processing ? "Opening Checkout..." : "Deposit via M-Pesa"}
               </Button>
             </div>
           )}

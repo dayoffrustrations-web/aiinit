@@ -129,6 +129,9 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
               <SheetTitle className="text-xl font-bold text-foreground">
                 {mode === "login" ? "Welcome Back" : "Create Account"}
               </SheetTitle>
+              <SheetDescription className="sr-only">
+                Use this panel to sign in or create your BronzeBet account.
+              </SheetDescription>
               <p className="text-sm text-muted-foreground">
                 {mode === "login" ? "Sign in to play." : "Sign up to start playing."}
               </p>

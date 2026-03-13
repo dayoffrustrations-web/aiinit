@@ -28,12 +28,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshBalance = async () => {
     if (!user) return;
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("balances")
       .select("amount")
       .eq("user_id", user.id)
-      .single();
-    if (data) setBalance(Number(data.amount));
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to fetch balance:", error.message);
+      return;
+    }
+
+    setBalance(data ? Number(data.amount) : 0);
   };
 
   useEffect(() => {
