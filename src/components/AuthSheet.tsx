@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Rocket, Phone, Eye, EyeOff, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,7 @@ const checkIsAdmin = async (userId: string): Promise<boolean> => {
     .select("role")
     .eq("user_id", userId)
     .eq("role", "admin")
-    .single();
+    .maybeSingle();
   return !!data;
 };
 
@@ -73,17 +73,32 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
         
         const userId = signUpData.user?.id;
         if (userId) {
-          await supabase.from("profiles").insert({
-            user_id: userId,
-            username,
-            display_name: username,
-            phone_number: phone,
-            terms_accepted: true,
-          });
-          await supabase.from("balances").insert({
-            user_id: userId,
-            amount: 0,
-          });
+          const { error: profileError } = await supabase.from("profiles").upsert(
+            {
+              user_id: userId,
+              username,
+              display_name: username,
+              phone_number: phone,
+              terms_accepted: true,
+            },
+            { onConflict: "user_id" }
+          );
+          if (profileError) throw profileError;
+
+          const { data: existingBalance, error: balanceCheckError } = await supabase
+            .from("balances")
+            .select("id")
+            .eq("user_id", userId)
+            .maybeSingle();
+          if (balanceCheckError) throw balanceCheckError;
+
+          if (!existingBalance) {
+            const { error: balanceInsertError } = await supabase.from("balances").insert({
+              user_id: userId,
+              amount: 0,
+            });
+            if (balanceInsertError) throw balanceInsertError;
+          }
         }
         const isAdmin = userId ? await checkIsAdmin(userId) : false;
         onClose();
@@ -114,6 +129,9 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
               <SheetTitle className="text-xl font-bold text-foreground">
                 {mode === "login" ? "Welcome Back" : "Create Account"}
               </SheetTitle>
+              <SheetDescription className="sr-only">
+                Use this panel to sign in or create your BronzeBet account.
+              </SheetDescription>
               <p className="text-sm text-muted-foreground">
                 {mode === "login" ? "Sign in to play." : "Sign up to start playing."}
               </p>
