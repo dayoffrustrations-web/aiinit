@@ -46,6 +46,10 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
       toast.error("Enter a valid phone number");
       return;
     }
+    if (mode === "signup" && !termsAccepted) {
+      toast.error("You must accept the Terms & Conditions to create an account");
+      return;
+    }
     setLoading(true);
     const email = phoneToEmail(phone);
     try {
