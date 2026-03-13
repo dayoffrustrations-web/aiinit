@@ -5,6 +5,7 @@ import { Rocket, Phone, Eye, EyeOff, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import TermsAndConditions from "@/components/TermsAndConditions";
 
 const checkIsAdmin = async (userId: string): Promise<boolean> => {
   const { data } = await (supabase as any)
@@ -20,7 +21,7 @@ type AuthMode = "login" | "signup";
 
 const phoneToEmail = (phone: string) => {
   const cleaned = phone.replace(/[^0-9+]/g, "");
-  return `${cleaned}@mozzatbet.app`;
+  return `${cleaned}@bronzebet.app`;
 };
 
 interface AuthSheetProps {
@@ -37,11 +38,16 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
   const [referralCode, setReferralCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone || phone.length < 10) {
       toast.error("Enter a valid phone number");
+      return;
+    }
+    if (mode === "signup" && !termsAccepted) {
+      toast.error("You must accept the Terms & Conditions to create an account");
       return;
     }
     setLoading(true);
@@ -72,6 +78,7 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
             username,
             display_name: username,
             phone_number: phone,
+            terms_accepted: true,
           });
           await supabase.from("balances").insert({
             user_id: userId,
@@ -177,7 +184,11 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full py-3 text-sm font-bold uppercase tracking-wider">
+            {mode === "signup" && (
+              <TermsAndConditions accepted={termsAccepted} onAcceptChange={setTermsAccepted} />
+            )}
+
+            <Button type="submit" disabled={loading || (mode === "signup" && !termsAccepted)} className="w-full py-3 text-sm font-bold uppercase tracking-wider">
               {loading ? "Please wait..." : mode === "login" ? "Sign In" : "Create Account"}
             </Button>
           </form>
