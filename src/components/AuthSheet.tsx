@@ -184,7 +184,11 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full py-3 text-sm font-bold uppercase tracking-wider">
+            {mode === "signup" && (
+              <TermsAndConditions accepted={termsAccepted} onAcceptChange={setTermsAccepted} />
+            )}
+
+            <Button type="submit" disabled={loading || (mode === "signup" && !termsAccepted)} className="w-full py-3 text-sm font-bold uppercase tracking-wider">
               {loading ? "Please wait..." : mode === "login" ? "Sign In" : "Create Account"}
             </Button>
           </form>
