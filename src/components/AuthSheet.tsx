@@ -73,17 +73,32 @@ const AuthSheet = ({ open, onClose }: AuthSheetProps) => {
         
         const userId = signUpData.user?.id;
         if (userId) {
-          await supabase.from("profiles").insert({
-            user_id: userId,
-            username,
-            display_name: username,
-            phone_number: phone,
-            terms_accepted: true,
-          });
-          await supabase.from("balances").insert({
-            user_id: userId,
-            amount: 0,
-          });
+          const { error: profileError } = await supabase.from("profiles").upsert(
+            {
+              user_id: userId,
+              username,
+              display_name: username,
+              phone_number: phone,
+              terms_accepted: true,
+            },
+            { onConflict: "user_id" }
+          );
+          if (profileError) throw profileError;
+
+          const { data: existingBalance, error: balanceCheckError } = await supabase
+            .from("balances")
+            .select("id")
+            .eq("user_id", userId)
+            .maybeSingle();
+          if (balanceCheckError) throw balanceCheckError;
+
+          if (!existingBalance) {
+            const { error: balanceInsertError } = await supabase.from("balances").insert({
+              user_id: userId,
+              amount: 0,
+            });
+            if (balanceInsertError) throw balanceInsertError;
+          }
         }
         const isAdmin = userId ? await checkIsAdmin(userId) : false;
         onClose();
