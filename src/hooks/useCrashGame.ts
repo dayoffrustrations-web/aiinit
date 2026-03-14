@@ -203,7 +203,7 @@ export function useCrashGame() {
           .select("*")
           .eq("user_id", user.id)
           .eq("date", today)
-          .single();
+          .maybeSingle();
 
         if (existing) {
           await supabase
