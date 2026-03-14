@@ -182,7 +182,7 @@ export function useCrashGame() {
           .from("balances")
           .select("amount")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
         if (balanceData) {
           await supabase
             .from("balances")
@@ -194,7 +194,7 @@ export function useCrashGame() {
           .from("profiles")
           .select("username")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
         const username = profile?.username || "Player";
         const today = new Date().toISOString().split("T")[0];
 
@@ -203,7 +203,7 @@ export function useCrashGame() {
           .select("*")
           .eq("user_id", user.id)
           .eq("date", today)
-          .single();
+          .maybeSingle();
 
         if (existing) {
           await supabase
@@ -434,7 +434,7 @@ export function useCrashGame() {
         .from("balances")
         .select("amount")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
       if (balanceData) {
         const newBalance = Number(balanceData.amount) - amount;
         if (newBalance < 0) return;

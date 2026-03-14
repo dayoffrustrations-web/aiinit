@@ -14,7 +14,7 @@ interface WalletModalProps {
 type Tab = "deposit" | "withdraw";
 type Status = "idle" | "loading" | "success";
 
-const QUICK_AMOUNTS = [50, 100, 200, 500, 1000, 5000];
+const QUICK_AMOUNTS = [100, 200, 500, 1000, 2000, 5000];
 
 const WalletModal = ({ open, onClose }: WalletModalProps) => {
   const { balance, session } = useAuth();
@@ -29,8 +29,8 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const numAmount = Number(amount);
-    if (!numAmount || numAmount < 10) {
-      toast.error("Minimum amount is KES 10");
+    if (!numAmount || numAmount < 100) {
+      toast.error("Minimum amount is KES 100");
       return;
     }
     if (!phone || phone.length < 10) {
@@ -215,8 +215,8 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                min={10}
-                placeholder="Enter amount"
+                min={100}
+                placeholder="Enter amount (min 100)"
                 className="w-full bg-secondary border border-border rounded-lg px-4 py-3 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
             </div>
