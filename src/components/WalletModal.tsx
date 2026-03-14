@@ -29,8 +29,8 @@ const WalletModal = ({ open, onClose }: WalletModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const numAmount = Number(amount);
-    if (!numAmount || numAmount < 10) {
-      toast.error("Minimum amount is KES 10");
+    if (!numAmount || numAmount < 100) {
+      toast.error("Minimum amount is KES 100");
       return;
     }
     if (!phone || phone.length < 10) {
